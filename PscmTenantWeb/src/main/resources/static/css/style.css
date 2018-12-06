@@ -1,0 +1,18 @@
+@charset "utf-8";
+/* 你自己的样式 */
+
+#messageNumber{width:7px;height:7px;border-radius:50%;position:relative;left:97%;top:10px;background:#f30808;}
+.btn-status{color: #fff; background-color: #b5b7bb;border-color: #b5b7bb;}
+.btn-status:hover,
+.btn-status:focus,
+.btn-status:active,
+.btn-status.active{color:#fff;background-color:#94999a;border-color:#94999a}
+
+.gengeral-list{width: 200px; padding: 10px;border-right: 1px black solid;float: left}
+#master-contents>li{font-size: 16px;width: 180px;height: 40px;background-color: red;margin-bottom: 20px;text-align: center;padding-top: 12px;}
+
+#proj_tree{width:180px;height:500px;padding-top: 10px;}
+#proj_tree li{width:100%;height: 10px;padding: 10px 0px 10px 0px;}
+/* #proj_tree li{width:100%;height: 10px;background-color: red;border: 1px solid black;padding: 10px 0px 20px 0px;text-align: center;} */
+
+

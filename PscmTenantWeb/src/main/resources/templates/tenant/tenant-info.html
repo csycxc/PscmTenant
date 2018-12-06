@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" th:href="@{/css/jquery.dataTables.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/semantic.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/dataTables.semanticui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/skin/default/skin.css}" id="skin" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/tuodongyemian.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css}" />
+
+<script type="text/javascript" th:src="@{/js/addLoadEvent.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery/jquery.dataTables.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery/semantic.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/H-ui.admin.js}"></script>
+<script type="text/javascript" th:src="@{/lib/zTree/v3/js/jquery.ztree.all-3.5.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/jquery.treegrid.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.treegrid.bootstrap3.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery/dataTables.select.min.js}"></script>
+
+<style>
+.page-container {
+	padding: 1px 5px 5px 5px;
+}
+
+tr.focus {
+	background-color: #eee;
+}
+</style>
+</head>
+<body>
+<script type="text/javascript" th:inline="javascript">
+
+/*<![CDATA[*/
+var basePath = /*[[@{/}]]*/;
+/*]]>*/
+</script>
+	<div id="box" class="page-container" style="height:95%;padding-top: 15px;">
+		<form class="form form-horizontal" id="form-ht-add" action=""
+			onsubmit="return submitCheck()">
+			<h4>基本信息</h4><hr />
+			<div th:if="${t!=null}" class="row cl" style="padding-left: 20px;padding-right: 20px;">
+				<span class="l" style="margin-right: 20px;margin-bottom: 10px;"><a href="javascript:;" onclick="tenant_add_parent('添加父租户','800','500')"
+					class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					添加父租户</a></span>
+				<span th:if="${t.tenantType==1}" class="l" style="margin-right: 20px;margin-bottom: 10px;"><a href="javascript:;" onclick="tenant_add_children('添加子租户','800','500')"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					添加子租户</a></span>
+					<span class="l" style="margin-bottom: 10px;"><a href="javascript:;" onclick="tenant_update('修改租户','800','500')"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					修改信息</a></span>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">租户编号：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="tenantCode" name="tenantCode" th:value="${t!= null}?${t.tenantCode}" readonly="readonly"/>
+				</div>
+				<label class="form-label col-xs-3 col-sm-2">租户类型：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="tenantType" name="tenantType"  th:value="${t!= null}?${t.tenantType}"  readonly="readonly"/>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">租户账号：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="account" name="account" th:value="${t!= null}?${t.account}" readonly="readonly"/>
+				</div>
+				<label class="form-label col-xs-3 col-sm-2">租户名称：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="tenantName" name="name"  th:value="${t!= null}?${t.name}" readonly="readonly"/>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">租户状态：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="status" name="status"  th:value="${t!= null}?${t.status}" readonly="readonly"/>
+				</div>
+			</div>
+			<div class="row cl" style="display: none;">
+				<label class="form-label col-xs-3 col-sm-2">父租户：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="parentCode" name="parentCode"  th:value="${t!= null}?${t.parentCode}" readonly="readonly"/>
+				</div>
+			</div>
+			<h4>关联实体</h4><hr />
+			<div th:if="${t!= null}" class="row cl" style="padding-left: 20px;padding-right: 20px;">
+				<span th:if="${t.tenantReal== null}" class="l real_join" style="margin-right: 20px;margin-bottom: 10px;"><a href="javascript:;" onclick="tenantReal_join('关联实体','800','500')"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					关联实体</a></span>
+				<span th:if="${t.tenantReal!= null}" class="l real_del" style="margin-bottom: 10px;"><a href="javascript:;" onclick="tenantReal_del()"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					解除关联</a></span>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">企业编号：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="realCode" name="realCode" th:value="${t!= null && t.tenantReal != null}?${t.tenantReal.realCode}" readonly="readonly"/>
+				</div>
+				<label class="form-label col-xs-3 col-sm-2">企业名称：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="realName" name="realName" th:value="${t!= null && t.tenantReal != null}?${t.tenantReal.name}" readonly="readonly"/>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">企业地址：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="realAddress" name="realAddress" th:value="${t!= null && t.tenantReal != null}?${t.tenantReal.address}" readonly="readonly"/>
+				</div>
+				<label class="form-label col-xs-3 col-sm-2">企业性质：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="realType" name="realType" th:value="${t!= null && t.tenantReal != null}?${t.tenantReal.realType}" readonly="readonly"/>
+				</div>
+			</div>
+			<h4>动态数据源</h4><hr />
+			<div th:if="${t!= null}" class="row cl" style="padding-left: 20px;padding-right: 20px;">
+				<span th:if="${t.source== null}" class="l source_join" style="margin-right: 20px;margin-bottom: 10px;"><a href="javascript:;" onclick="source_join('关联数据源','800','500')"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					关联数据源</a></span>
+				<span th:if="${t.source!= null}" class="l source_del" style="margin-bottom: 10px;"><a href="javascript:;" onclick="source_del()"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					解除关联</a></span>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">数据源编号：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="sourceCode" name="sourceCode" th:value="${t!= null && t.source != null}?${t.source.sourceCode}" readonly="readonly"/>
+				</div>
+				<label class="form-label col-xs-3 col-sm-2">数据源名称：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="sourceName" name="sourceName" th:value="${t!= null && t.source != null}?${t.source.sourceName}" readonly="readonly"/>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">驱动器名称：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="driveName" name="driveName" th:value="${t!= null && t.source != null}?${t.source.driveName}" readonly="readonly"/>
+				</div>
+				<label class="form-label col-xs-3 col-sm-2">链接地址：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="linkUrl" name="linkUrl" th:value="${t!= null && t.source != null}?${t.source.linkUrl}" readonly="readonly"/>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3 col-sm-2">用户名：</label>
+				<div class="formControls col-xs-3 col-sm-3">
+					<input type="text" class="input-text" id="userName" name="userName" th:value="${t!= null && t.source != null}?${t.source.userName}" readonly="readonly"/>
+				</div>
+			</div>
+			<h4>功能模块</h4><hr />
+			<div class="row cl" style="padding-left: 20px;padding-right: 20px;">
+			<span th:if="${t!= null}" class="l selector_business" style="margin-bottom: 10px;"><a href="javascript:;" onclick="bizAuthority_add('添加模块授权','800','500')"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
+					添加授权</a></span>
+				<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="btn-refresh Hui-iconfont">&#xe68f;</i></a>
+				<table id="bizAuthority" class="display" cellspacing="0" width="100%" align="center" style="table-layout:fixed;">
+					<thead>
+						<tr>
+							<th style="width:15%;">模块编码</th>
+							<th style="width:25%;">英文名</th>
+							<th style="width:40%;">中文名</th>
+							<th style="width:20%;">模块描述</th>
+							<th style="width:6%; ">操作</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</form>
+	</div>
+<script th:inline="JavaScript">
+	 var tenantCode = $("#tenantCode").val();
+	 var parentCode = $("#parentCode").val();
+	 var tenantType = $("#tenantType").val();
+	 var status = $("#status").val();
+	 if(tenantType=="0"){
+		 $("#tenantType").val("施工项目部");
+	 }else if(tenantType=="1"){
+		 $("#tenantType").val("施工企业公司");
+	 }
+	 
+	 if(status=="1"){
+		 $("#status").val("正常");
+	 }else if(status=="2"){
+		 $("#status").val("欠费");
+	 }else if(status=="3"){
+		 $("#status").val("过期");
+	 }else if(status=="4"){
+		 $("#status").val("没有使用");
+	 }
+	 
+	 $(document).ready(function() {
+			$('#bizAuthority').DataTable({
+					data : /*[[${t!=null}?${t.bizs}]]*/,
+					columns : [{
+						data : "bizCode",
+						"sDefaultContent" : ""
+					}, {
+						data : "bizEnglishName",
+						"sDefaultContent" : ""
+					}, {
+						data : "bizChineseName",
+						"sDefaultContent" : ""
+					}, {
+						data : "bizDesc",
+						"sDefaultContent" : ""
+					}, {
+		                 "sClass": "center",
+		                 "data": null,
+		                 "orderable": false,  
+		                 "render": function (data, type, full, meta) {
+		                	 return '<a style="text-decoration:none" class="ml-5" onClick="bizAuthority_del(this,\'' 
+		                			 + data.bizCode + '\')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>';
+	                	 }/* <a style="text-decoration:none" class="ml-5" onClick="bizAuthority_add(\'修改模块\',\''
+            			 + data.bizCode + '\',\'800\',\'500\')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>  */
+		            }],
+					language:{ "sEmptyTable": "数据为空" }
+				});
+		});
+	 
+	 /*父租户-添加*/
+		function tenant_add_parent(title,w,h){
+			var index = layer.open({
+				type: 2,
+				title: title,
+				content: basePath+'tenant/editTenant?parentCode=0'
+			});
+			layer.full(index);
+		} 
+		 /*子租户-添加*/
+	function tenant_add_children(title,w,h){
+		var index = layer.open({
+			type: 2,
+			title: title,
+			content: basePath+'tenant/editTenant?parentCode='+tenantCode
+		});
+		layer.full(index);
+	}
+		 /* 修改租户 */
+	 function tenant_update(title,w,h){
+		 var index = layer.open({
+				type: 2,
+				title: title,
+				content: basePath+'tenant/editTenant?tenantCode='+tenantCode+'&parentCode='+parentCode
+			});
+			layer.full(index);
+	 }
+	 
+	 /*实体-关联*/
+	 function tenantReal_join(title,w,h){
+		 var index = layer.open({
+				type: 2,
+				title: title,
+				content: basePath+'tenantReal/editTenRealJoin?tenantCode='+tenantCode
+			});
+			layer.full(index);
+	 }
+	 /*实体-解除*/
+	 function tenantReal_del(){
+		 layer.confirm('确认要解除关联吗？', function(index) {
+					jQuery.ajax({
+						type : "post",
+						dataType : "json",
+						url : basePath + "tenantReal/delJoinTenantReal",
+						data : "tenantCode="+tenantCode,
+						success : function(data) {
+							layer.msg(data.retMsg, {
+								icon : 1,
+								time : 1000
+							});
+							$('.btn-refresh').click();
+						},
+						error : function(data) {
+							layer.msg('解除失败!', {
+								icon : 1,
+								time : 1000
+							});
+							console.log(data.msg);
+						},
+					});
+			});
+	 }
+	 
+	 /*数据源-关联*/
+	 function source_join(title,w,h){
+		 var index = layer.open({
+				type: 2,
+				title: title,
+				content: basePath+'dynamicSource/editSourceJoin?tenantCode='+tenantCode
+			});
+			layer.full(index);
+	 }
+	 
+	 /*数据源-解除*/
+	 function source_del(){
+		 layer.confirm('确认要解除关联吗？', function(index) {
+					jQuery.ajax({
+						type : "post",
+						dataType : "json",
+						url : basePath + "dynamicSource/delJoinSource",
+						data : "tenantCode="+tenantCode,
+						success : function(data) {
+							layer.msg(data.retMsg, {
+								icon : 1,
+								time : 1000
+							});
+							$('.btn-refresh').click();
+						},
+						error : function(data) {
+							layer.msg('解除失败!', {
+								icon : 1,
+								time : 1000
+							});
+							console.log(data.msg);
+						}
+					});
+			});
+	 }
+	 
+	 /*模块-添加授权*/
+		function bizAuthority_add(title, w, h) {
+			var index = layer.open({
+				type : 2,
+				title : title,
+				content : basePath + 'bizAuthority/editBizAuthority?tenantCode='+ tenantCode
+			});
+			layer.full(index);
+		}
+
+		/*模块-解除授权*/
+		function bizAuthority_del(obj, id) {
+			layer.confirm('确认要解除授权吗？', function(index) {
+				var bizList = [];
+				var biz = {};
+				biz.tenantCode = tenantCode;
+				biz.bizCode = id;
+				bizList.push(biz);
+				
+				if(bizList.length!=0){
+					jQuery.ajax({
+						type : "post",
+						dataType : "json",
+						url : basePath + "bizAuthority/deleteJoinBizAuthority",
+						data : JSON.stringify(bizList),
+					    contentType: 'application/json;charset=utf-8',
+						success : function(data) {
+							$(obj).parents("tr").remove();
+							layer.msg(data.retMsg, {
+								icon : 1,
+								time : 1000
+							});
+						},
+						error : function(data) {
+							layer.msg('解除失败!', {
+								icon : 1,
+								time : 1000
+							});
+							console.log(data.msg);
+						},
+					});
+				}
+			});
+		}
+	 
+</script>
+
+</body>

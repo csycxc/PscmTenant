@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" th:href="@{/css/jquery.dataTables.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/semantic.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/dataTables.semanticui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/skin/default/skin.css}" id="skin" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/tuodongyemian.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css}" />
+
+<script type="text/javascript" th:src="@{/js/addLoadEvent.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery/jquery.dataTables.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery/semantic.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/H-ui.admin.js}"></script>
+<script type="text/javascript" th:src="@{/lib/zTree/v3/js/jquery.ztree.all-3.5.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/jquery.treegrid.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.treegrid.bootstrap3.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery/dataTables.select.min.js}"></script>
+
+<style>
+.page-container {
+	padding: 1px 5px 5px 5px;
+}
+tr.focus{
+    background-color:#eee;
+}
+</style>
+</head>
+<body>
+<script type="text/javascript" th:inline="javascript">
+
+/*<![CDATA[*/
+var basePath = /*[[@{/}]]*/;
+/*]]>*/
+</script>
+<div id="box" class="page-container">
+	<textarea name="treeNode" id="treeNode" style="display: none;">[[${treeNode}]]</textarea>
+	<div id="leftdiv">
+		<div style="height:100%;border:solid 1px #ccc;">
+			<!-- proj_tree -->
+			<ul id="proj_tree" class="ztree" style="padding:10px;"></ul>
+		</div>
+	</div>
+	<div id="line"></div>
+	<div id="rightdiv" style="padding-left: 10px;padding-top: 20px;">
+		<div class="show_iframe"><!--  style="padding-top: 40px;" -->
+			<iframe scrolling="yes" frameborder="0" src="tenant-info" name="mainframe2" id="mainframe2"></iframe>
+		</div>
+	</div>
+</div>
+<script language="JavaScript">
+
+addLoadEvent(zuoyoutuodong());
+
+function zTreeOnNodeCreated(event, treeId, treeNode) {
+	var zTree = jQuery.fn.zTree.getZTreeObj("proj_tree");
+}
+	
+var setting = {
+	view: {
+		dblClickExpand: true,
+		showLine: false,
+		selectedMulti: false,
+		showIcon: false,
+		fontCss: {'color':'black','font-size':'20px'}
+	},
+	data: {
+		simpleData: {
+			enable:true,
+			idKey: "id",
+			pIdKey: "pId",
+			rootPId: ""
+		}
+	},
+	callback: {
+		onNodeCreated: zTreeOnNodeCreated,
+		
+		beforeClick: function(treeId, treeNode) {
+			var zTree = jQuery.fn.zTree.getZTreeObj("proj_tree");
+			/* if (treeNode.isParent) {
+				//zTree.expandNode(treeNode);
+				return false;
+			} else {
+				return true;
+			} */
+		}
+	},
+};
+
+$(document).ready(function(){
+	//escapeXml=false;
+	var t = $("#proj_tree");
+	var a = document.getElementById("treeNode").innerText;
+	jQuery.fn.zTree.init(t, setting, JSON.parse(a));
+	var zTree = jQuery.fn.zTree.getZTreeObj("proj_tree");
+	
+});
+		
+</script>
+
+</body>

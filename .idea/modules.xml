@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PscmTenant.iml" filepath="$PROJECT_DIR$/PscmTenant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PscmTenantBiz/PscmTenantBiz.iml" filepath="$PROJECT_DIR$/PscmTenantBiz/PscmTenantBiz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PscmTenantPersist/PscmTenantPersist.iml" filepath="$PROJECT_DIR$/PscmTenantPersist/PscmTenantPersist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PscmTenantService/PscmTenantService.iml" filepath="$PROJECT_DIR$/PscmTenantService/PscmTenantService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PscmTenantWeb/PscmTenantWeb.iml" filepath="$PROJECT_DIR$/PscmTenantWeb/PscmTenantWeb.iml" />
+    </modules>
+  </component>
+</project>
